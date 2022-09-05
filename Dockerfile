@@ -5,11 +5,15 @@ WORKDIR /app
 
 COPY ./ ./
 
+ENV GOOS=linux
+ENV GOARCH=amd64
+
 RUN go mod download
 RUN go build -o reverseproxy
-RUN go install
 
 FROM alpine as output
 
+COPY --from=build app/reverseproxy /reverseproxy
+
 EXPOSE 8080
-CMD [ "./reverseproxy" ]
+CMD [ "/reverseproxy" ]

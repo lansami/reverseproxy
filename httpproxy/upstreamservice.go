@@ -37,7 +37,7 @@ func (s *Service) InitializeUpstreamService() {
 		}
 	}
 
-	s.startCheckHostsHealthPeriodically();
+	go s.startCheckHostsHealthPeriodically();
 }
 
 func (s *Service) HandleRequest(wr http.ResponseWriter, req *http.Request) {
@@ -109,7 +109,7 @@ func (s *Service) startCheckHostsHealthPeriodically() {
 			}
 			healthCheckTimeout, _ := time.ParseDuration(healthCheckTimeoutString);
 			time.Sleep(healthCheckTimeout * time.Second);
-			go s.checkHostsHealth(c);
+			s.checkHostsHealth(c);
 			log.Println(msg);
 		}(message)
 	}
